@@ -1,22 +1,62 @@
 # protobuff_openvpn_client_server
 This example will show how to create two linux containers, the client and the server that communicate each other with the use of the overlay network of OpenVPN. We create the client the server and after we send some file for understanding which communication protocoll between JSON and Protobuffer is better.
 
-### Descrizione
-## Descrizione
+### Description
+## Description
 First we create install protobuff, after we create the server and client for our scope, finally we send the messages between these two entities  
 
-### Prerequisiti
-## Prerequisiti
-This tutorial is created for the distro Ubuntu 20.04
+### Requirements
+## Requirements
+1. This tutorial is created for the distro Ubuntu 20.04
+2. Installation of protobuffer protocol
+3. OpenVPN
+4. Easy-rsa
 
 ### Installation of Linux container
-## Broker
+## Installation of Linux container
 
-Per la scelta del broker è possibile utilizzare iot.eclipse.org oppure avviare un broker locale come [Mosquitto](https://mosquitto.org/) che è possibile installarlo tramite brew
-
-@@ -31,11 +31,30 @@ Avviarlo caricando la configurazione
-/usr/local/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
+First we need to install the Linux container enviornment: [linux_container]([(https://linuxcontainers.org/it/lxd/getting-started-cli/]) 
 ```
+sudo apt-get install lxd lxd-client
+```
+Configuration of LXD:
+```
+sudo lxd init
+```
+Creations of the container:
+```
+lxc init ubuntu:20.04 container_name 
+```
+Starting the container:
+```
+lxc start container_name 
+```
+Use the container:
+```
+lxc exec container_name -- sudo --login --user root
+```
+### Installation of protobuff in the container
+## Installation of protobuff in the container
+Make sure you grab the latest version 
+```
+wget https://github.com/protocolbuffers/protobuf/releases/download/v24.4/protoc-24.4-linux-x86_64.zip
+```
+
+# Unzip
+unzip protoc-24.4-linux-x86_64.zip -d protoc3
+
+# Move protoc to /usr/local/bin/
+sudo mv protoc3/bin/* /usr/local/bin/
+
+# Move protoc3/include to /usr/local/include/
+sudo mv protoc3/include/* /usr/local/include/
+
+# Optional: change owner
+sudo chown $USER /usr/local/bin/protoc
+sudo chown -R $USER /usr/local/include/google
+
+
+
 
 ### Mosquitto example
 ## Configurazione
