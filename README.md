@@ -1,20 +1,15 @@
 # protobuff_openvpn_client_server
-Il codice generato ha lo scopo di chiarire i concetti base della comunicazione in oggetto, dando spunto alla possibile implementazione finale
+This example will show how to create two linux containers, the client and the server that communicate each other with the use of the overlay network of OpenVPN. We create the client the server and after we send some file for understanding which communication protocoll between JSON and Protobuffer is better.
 
 ### Descrizione
 ## Descrizione
-Paho-mqtt è stato implementato principalmente nel file *./personal-mqtt.rb*, in modo da stampare messaggi chiari durante l'esecuione e, per chiarezza e controllo, i messaggi di tutti i client mqtt vengono inviati in sequenza  
-
-Inoltre la classe presente nel file *mt32.rb*, ovvero il device mt32, come primo messaggio attende la configurazione (in cui troverà l'id della sessione). In tale file vengono creati 3 client che attendono la configurazione e, una volta che **tutti** l'hanno ricevuta, inviano un messaggio ogni secondo.
-
-Infine il front-end, una volta avviato, ascolta sul topic della sessione con id ***sessionXXX*** per poi inviare la configurazione a due client con tale sessione, e ad un terzo con una sessione differente (ovvero il front-end non riceverà i dati di quest'ultimo). Questo solo a titolo di esempio dato che la configurazione di ogni device verrà inviata da front-end differenti (oppure dal server)
+First we create install protobuff, after we create the server and client for our scope, finally we send the messages between these two entities  
 
 ### Prerequisiti
 ## Prerequisiti
+This tutorial is created for the distro Ubuntu 20.04
 
-È necessario installare Ruby e [paho-mqtt](https://github.com/RubyDevInc/paho.mqtt.ruby)  
-
-### Broker
+### Installation of Linux container
 ## Broker
 
 Per la scelta del broker è possibile utilizzare iot.eclipse.org oppure avviare un broker locale come [Mosquitto](https://mosquitto.org/) che è possibile installarlo tramite brew
@@ -23,8 +18,8 @@ Per la scelta del broker è possibile utilizzare iot.eclipse.org oppure avviare 
 /usr/local/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
 ```
 
-#### Mosquitto example
-### Configurazione
+### Mosquitto example
+## Configurazione
 
 Subscription with `mosquitto_sub -t "/World"` and publish with `mosquitto_sub -t "/World" -m "World"`
 Broker mqtt ip `iot.eclipse.org` e porta `1883`.
