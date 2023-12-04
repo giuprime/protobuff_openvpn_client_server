@@ -15,7 +15,7 @@ First we create install protobuff, after we create the server and client for our
 ### Installation of Linux container
 ## Installation of Linux container
 
-First we need to install the Linux container enviornment: [linux_container]]((https://linuxcontainers.org/it/lxd/getting-started-cli/))
+First we need to install the Linux container enviornment: 
 ```
 sudo apt-get install lxd lxd-client
 ```
