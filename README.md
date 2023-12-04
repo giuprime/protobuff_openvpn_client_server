@@ -97,9 +97,45 @@ set_var KEY_EMAIL=""
 set_var KEY_OU=""
 set_var KEY_NAME=""
 ```
-Update system’s variables : 
-```./easyrsa init-pki; ./easyrsa build-ca```
+Update system’s variables: 
+```
+./easyrsa init-pki; ./easyrsa build-ca
+```
 Generate Diffie-Helmann keys: 
-```./easyrsa gen-dh```
+```
+./easyrsa gen-dh
+```
 Generate server cretificate: 
-```./easyrsa build-server-full server nopass```
+```
+./easyrsa build-server-full server nopass
+```
+Generate HMAC signature to increase the security: 
+```
+openvpn --genkey --secret pki/ta.key
+```
+Generate OpenVPN Revocation Certificate: 
+```
+./easyrsa gen-crl
+```
+Copy certificates in openvpn folder to configure server: 
+```
+cp -rp ./pki/{ca.crt,dh.pem,ta.key,crl.pem,issued,private} /etc/openvpn/server/
+```
+Create the configuration file of the server:
+```
+gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz | sudo tee /etc/openvpn/server.conf
+sudo nano /etc/openvpn/server.conf
+```
+Change the configuration file server.conf:
+`
+comment server-bridge and also server-bridge 10.8.0.4 255.255.255.0 10.8.0.50 10.8.0.100 lines
+uncomment (removing ;) the blue line and add the red ones:
+tls-auth ta.key 0
+key-direction 0
+cipher AES-256-CBC
+auth SHA512
+user nobody
+group nogroup
+server 10.8.0.0 255.255.255.0
+client-to-client
+`
