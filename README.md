@@ -15,7 +15,7 @@ First we create install protobuff, after we create the server and client for our
 ### Installation of Linux container
 ## Installation of Linux container
 
-First we need to install the Linux container enviornment: [linux_container]((https://linuxcontainers.org/it/lxd/getting-started-cli/))
+First we need to install the Linux container enviornment: [linux_container]]((https://linuxcontainers.org/it/lxd/getting-started-cli/))
 ```
 sudo apt-get install lxd lxd-client
 ```
@@ -44,7 +44,7 @@ wget https://github.com/protocolbuffers/protobuf/releases/download/v24.4/protoc-
 A little disclimer in macbook with chip apple silicon the vm ubuntu need an ISO image with arm architecture. This
 created a problem in the installation of protobuf. So for users with a mac-book with chip apple silicon is needed to use the following command instead
 ```
-wget https ://github .com/protocolbuffers/protobuf/releases/download/v25.1/protoc-25.1-linux-aarch_64.zip
+wget https ://github.com/protocolbuffers/protobuf/releases/download/v25.1/protoc-25.1-linux-aarch_64.zip
 ```
 Unzip
 ```
