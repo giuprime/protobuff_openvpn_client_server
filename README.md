@@ -62,8 +62,8 @@ Move protoc3/include to /usr/local/include/
 ```
 sudo mv protoc3/include/* /usr/local/include/
 ```
-### Creation of the server
-## Creation of the server
+### Creation and setup of the server
+## Creation and setup of the server
 Install openVPN:
 ```
 sudo apt update
@@ -127,15 +127,112 @@ gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz | s
 sudo nano /etc/openvpn/server.conf
 ```
 Change the configuration file server.conf:
-`
+```
 comment server-bridge and also server-bridge 10.8.0.4 255.255.255.0 10.8.0.50 10.8.0.100 lines
-uncomment (removing ;) the blue line and add the red ones:
-tls-auth ta.key 0
-key-direction 0
-cipher AES-256-CBC
-auth SHA512
-user nobody
-group nogroup
-server 10.8.0.0 255.255.255.0
-client-to-client
-`
+tls-auth ta.key 0    --> uncomment
+key-direction 0      --> add
+cipher AES-256-CBC   --> uncomment
+auth SHA512          --> add
+user nobody          --> uncomment
+group nogroup        --> uncomment
+server 10.8.0.0 255.255.255.0  --> uncomment
+client-to-client     --> add 
+```
+Enable network forwarding:
+```
+sudo nano /etc/sysctl.conf
+
+sudo sysctl -p
+```
+Configure the NAT via file:
+```
+nano /etc/ufw/before.rules
+
+You have to add at the begin of the file: 
+*nat
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 10.8.0.0/8 -o eth0 -j MASQUERADE
+COMMIT
+```
+Change another file:
+```
+sudo nano /etc/default/ufw -> Modify DEFAULT_FORWARD_POLICY="ACCEPT"
+```
+Allow forwarded traffic to go through firewall:
+```
+sudo ufw allow 1194/udp
+sudo ufw allow OpenSSH
+sudo ufw disable
+sudo ufw enable
+```
+Copy the certification and the other file in the folder of openVPN:
+```
+mv ./openvpn-ca/pki/ca.crt /etc/openvpn
+6 mv ./openvpn-ca/pki/issued/server.crt /etc/openvpn
+7 mv ./openvpn -ca/pki/private/server.key /etc/openvpn
+8 mv ta.key /etc/openvpn/
+```
+Enable OpenVPN Service
+```
+sudo systemctl enable openvpn@server
+``` 
+Start  OpenVPN Service:
+```
+sudo systemctl start openvpn@server
+```
+If there is a warning with the IPv4 and IPv6 you must change the server.conf file in this way:
+```
+# TCP or UDP server ?
+#;proto tcp
+#;proto tcp4
+proto udp4
+```
+Now the server is created, but we need to create the client with the command of LXC.
+After the creation of the client we need to send the certification from the server to the client in this way:
+```
+scp -r /etc/openvpn/files root@CLIENTIP :/etc/openvpn
+```
+Send this following file:
+1. dh.pem
+2. ta.key
+3. ca.crt
+4. server.crt
+5. server.key
+### Creation and setup of the client
+## Creation and setup of the client
+Install Openvpn: 
+```
+sudo apt install openvpn
+```
+Copy template config file: 
+```
+cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf client-configs/base.conf
+```
+Create config file:
+```
+nano ./client-configs/base.conf 
+
+remote [server_ip] 1194 --> add
+user nobody             --> uncomment  
+group nogroup           --> uncomment 
+cipher AES-256-CBC      --> add
+auth SHA512             --> add
+key-direction 1         --> add 
+script-security 2       --> add
+up /etc/openvpn/update-resolv-conf   --> add
+down /etc/openvpn/update-resolv-conf --> add
+```
+Copy in OpenVPN root:
+```
+mv base.conf /etc/openvpn/user1.ovpn
+```
+Copy in OpenVPN root: 
+```
+mv user1.ovpn /etc/openvpn/
+```
+Launch Openvpn client: 
+```
+sudo openvpn --config user1.ovpn
+```
+Now client and server communicate using the same overlay network.
+
