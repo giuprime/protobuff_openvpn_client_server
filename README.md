@@ -198,7 +198,7 @@ Send this following file:
 3. ca.crt
 4. server.crt
 5. server.key
-
+   
 ## Creation and setup of the client
 Install Openvpn: 
 ```
