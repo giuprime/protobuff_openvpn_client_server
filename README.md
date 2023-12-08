@@ -1,18 +1,18 @@
 # protobuff_openvpn_client_server
 This example will show how to create two linux containers, the client and the server that communicate each other with the use of the overlay network of OpenVPN. We create the client the server and after we send some file for understanding which communication protocoll between JSON and Protobuffer is better.
 
-### Description
+## Description
 
 First we create install protobuff, after we create the server and client for our scope, finally we send the messages between these two entities  
 
-### Requirements
+## Requirements
 
 1. This tutorial is created for the distro Ubuntu 20.04
 2. Installation of protobuffer protocol
 3. OpenVPN
 4. Easy-rsa
 
-### Installation of Linux container
+## Installation of Linux container
 
 
 First we need to install the Linux container enviornment: 
@@ -35,7 +35,7 @@ Use the container:
 ```
 lxc exec container_name -- sudo --login --user root
 ```
-### Installation of protobuff in the container
+## Installation of protobuff in the container
 
 Make sure you grab the latest version 
 ```
@@ -62,7 +62,7 @@ Move protoc3/include to /usr/local/include/
 ```
 sudo mv protoc3/include/* /usr/local/include/
 ```
-### Creation and setup of the server
+
 ## Creation and setup of the server
 Install openVPN:
 ```
@@ -198,7 +198,7 @@ Send this following file:
 3. ca.crt
 4. server.crt
 5. server.key
-### Creation and setup of the client
+
 ## Creation and setup of the client
 Install Openvpn: 
 ```
@@ -235,4 +235,6 @@ Launch Openvpn client:
 sudo openvpn --config user1.ovpn
 ```
 Now client and server communicate using the same overlay network.
+
+For the exchanging of the file you can create a file with the programming language that you want (for example Java, Python, etc.) and you can play.
 
